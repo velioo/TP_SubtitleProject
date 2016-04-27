@@ -8,7 +8,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 
 public class ListenerForStartEnd {
-	public ListenerForStartEnd(JTable subtitleTable, JFormattedTextField startTextField, JFormattedTextField endTextField, JTextField durationTextField) {
+	public ListenerForStartEnd(JTable subtitleTable, JFormattedTextField startTextField, JFormattedTextField endTextField, JTextField durationTextField, int selectedRow) {
 
 		try {
 			String startText = startTextField.getText();
@@ -42,15 +42,15 @@ public class ListenerForStartEnd {
 
 			durationValue = endDuration - startDuration;
 			DecimalFormat df = new DecimalFormat("#.###");
-			df.setRoundingMode(RoundingMode.CEILING);
+			df.setRoundingMode(RoundingMode.HALF_EVEN);
 			String duration = df.format(durationValue).replaceAll(",", ".");
 			
 			durationTextField.setText(duration);
 			
 			try {
 			if(subtitleTable.getSelectedRow() > -1) {
-				subtitleTable.setValueAt(startTextField.getText(), subtitleTable.getSelectedRow(), 1);
-				subtitleTable.setValueAt(endTextField.getText(), subtitleTable.getSelectedRow(), 2);		
+				subtitleTable.setValueAt(startTextField.getText(), selectedRow, 1);
+				subtitleTable.setValueAt(endTextField.getText(), selectedRow, 2);
 			}
 			} catch(Exception e) {
 				System.out.print("Running StartEnd for 1-st time\n");

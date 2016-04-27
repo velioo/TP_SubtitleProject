@@ -16,13 +16,13 @@ public class ButtonsProperties {
 		backwardsButton.setBorder(BorderFactory.createEmptyBorder());
 		backwardsButton.setContentAreaFilled(false);
 		backwardsButton.setFocusPainted(false);
-		backwardsButton.setBounds(433, 53, 28, 28);	
+		backwardsButton.setBounds(397, 7, 28, 28);	
 		
 		img = new ImageIcon(this.getClass().getResource("/forwards.png")).getImage();
 		forwardsButton.setIcon(new ImageIcon(img));
 		forwardsButton.setBorder(BorderFactory.createEmptyBorder());
 		forwardsButton.setContentAreaFilled(false);
-		//forwardsButton.setFocusPainted(false);
-		forwardsButton.setBounds(530, 53, 28, 28);
+		forwardsButton.setFocusPainted(false);
+		forwardsButton.setBounds(485, 7, 28, 28);
 	}
 }

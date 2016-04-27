@@ -6,24 +6,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
-public class FileOpenRead extends JFrame {
+import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 
-	private static final long serialVersionUID = 1L;
-
+public class FileOpenRead {
+	
+	private JTable subtitleTable;
+	
+	public FileOpenRead(JTable subtitleTable) {
+		this.subtitleTable = subtitleTable;
+	}
+	
 	@SuppressWarnings("resource")
-	public FileOpenRead(JTable subtitleTable) throws IOException {
-		super("Choose a file");
+	public void OpenSubtitles(EmbeddedMediaPlayerComponent mediaPlayerComponent) throws IOException {
 		JFileChooser chooser = new JFileChooser();
-		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setAcceptAllFileFilterUsed(true);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("*.srt,*.ass,*.sub,*.txt", "srt", "ass", "sub", "sub","txt");
 		chooser.setFileFilter(filter);
 		chooser.setMultiSelectionEnabled(false);
-		int option = chooser.showOpenDialog(FileOpenRead.this);
+		int option = chooser.showOpenDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(chooser.getSelectedFile().getAbsolutePath())));
@@ -58,7 +62,8 @@ public class FileOpenRead extends JFrame {
 				
 			}
 			model.addRow(obj);
-			
+			if(mediaPlayerComponent.isValid())
+				mediaPlayerComponent.getMediaPlayer().setSubTitleFile(chooser.getSelectedFile().getAbsolutePath());
 		}
 	}
 }

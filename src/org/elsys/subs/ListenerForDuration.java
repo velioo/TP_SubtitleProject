@@ -9,7 +9,7 @@ import javax.swing.JTextField;
 
 public class ListenerForDuration {
 
-	public ListenerForDuration(JTable subtitleTable, JFormattedTextField startTextField ,JFormattedTextField endTextField, JTextField durationTextField) {
+	public ListenerForDuration(JTable subtitleTable, JFormattedTextField startTextField ,JFormattedTextField endTextField, JTextField durationTextField, int selectedRow) {
 
 		try {
 			String startText = startTextField.getText();
@@ -80,8 +80,8 @@ public class ListenerForDuration {
 			endTextField.setValue(new String(sHours + ":" + sMinutes + ":" + sSeconds + decimals));
 		
 			if(subtitleTable.getSelectedRow() > -1) {
-				subtitleTable.setValueAt(startTextField.getText(), subtitleTable.getSelectedRow(), 1);
-				subtitleTable.setValueAt(endTextField.getText(), subtitleTable.getSelectedRow(), 2);		
+				subtitleTable.setValueAt(startTextField.getText(), selectedRow, 1);
+				subtitleTable.setValueAt(endTextField.getText(), selectedRow, 2);
 			}
 				
 		} catch (Exception e) {

@@ -16,7 +16,6 @@ public class TableProperties {
 		subtitleTable.setRowSelectionAllowed(true);
 		subtitleTable.getTableHeader().setReorderingAllowed(false);
 		subtitleTable.getTableHeader().setResizingAllowed(false);
-		subtitleTable.setBounds(1079, 228, -1075, 415);
 		
 		subtitleTable.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -33,7 +32,7 @@ public class TableProperties {
 		    }
 		});
 		
-		subtitleTable.getColumnModel().getColumn(0).setPreferredWidth(50);
+		subtitleTable.getColumnModel().getColumn(0).setPreferredWidth(60);
 		subtitleTable.getColumnModel().getColumn(1).setPreferredWidth(190);
 		subtitleTable.getColumnModel().getColumn(2).setPreferredWidth(190);
 		subtitleTable.getColumnModel().getColumn(3).setPreferredWidth(2000);
@@ -45,5 +44,7 @@ public class TableProperties {
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
 		renderer.setHorizontalAlignment(SwingConstants.CENTER);
 		subtitleTable.getColumnModel().getColumn(0).setCellRenderer(renderer);
+		subtitleTable.getColumnModel().getColumn(1).setCellRenderer(renderer);
+		subtitleTable.getColumnModel().getColumn(2).setCellRenderer(renderer);
 	}
 }

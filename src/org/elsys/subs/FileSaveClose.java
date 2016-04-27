@@ -4,17 +4,19 @@ import java.io.File;
 import java.io.FileWriter;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class FileSaveClose extends JFrame {
+public class FileSaveClose {
 
-	private static final long serialVersionUID = 1L;
-	public FileSaveClose(JTable subtitleTable, JFormattedTextField startTextField, JFormattedTextField endTextField) {
-		super("Choose a file");
+	private JTable subtitleTable;
+	
+	public FileSaveClose(JTable subtitleTable) {
+		this.subtitleTable = subtitleTable;
+	}
+	
+	public void saveSubtitles() {
 		
 		JFileChooser chooser = new JFileChooser(){
 			private static final long serialVersionUID = 1L;
@@ -42,6 +44,7 @@ public class FileSaveClose extends JFrame {
 		    }        
 		};
 		
+		
 		chooser.setAcceptAllFileFilterUsed(false);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".srt", "srt");
 		chooser.addChoosableFileFilter(filter);
@@ -52,7 +55,7 @@ public class FileSaveClose extends JFrame {
 		filter = new FileNameExtensionFilter(".txt", "txt");
 		chooser.addChoosableFileFilter(filter);
 		chooser.setMultiSelectionEnabled(false);
-		int option = chooser.showSaveDialog(FileSaveClose.this);
+		int option = chooser.showSaveDialog(null);
 		if (option == JFileChooser.APPROVE_OPTION) {
 			try {
 				Object obj [] = {"", "", "", ""};
