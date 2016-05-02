@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.SystemColor;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.text.ParseException;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -66,8 +68,9 @@ public class GuiBase {
 	@SuppressWarnings("unused")
 	private ListenerForTable tableListener = null;
 	private int currentSelectedRow; // Will be used to get the selected row if there is actually is and save it's index
+	private int lastSelectedRow = -1;
 	private JPopupMenu popup = new JPopupMenu();
-	private int resizeOpenCount = 0, resizeNewCount = 0;
+	private int resizeNewCount = 0;
 	
 	public GuiBase() {
 		initialize();
@@ -253,6 +256,55 @@ public class GuiBase {
 			
 		//
 			
+		// Make the italics, bold, underline buttons
+			Image img = new ImageIcon(this.getClass().getResource("/italic.png")).getImage();
+			JButton italic = new JButton(new ImageIcon(img));
+			img = new ImageIcon(this.getClass().getResource("/bold.png")).getImage();
+			JButton bold = new JButton(new ImageIcon(img));
+			img = new ImageIcon(this.getClass().getResource("/underline.png")).getImage();
+			JButton underline = new JButton(new ImageIcon(img));
+			
+			italic.setBorder(BorderFactory.createEmptyBorder());
+			italic.setContentAreaFilled(false);
+			italic.setFocusPainted(false);
+			bold.setBorder(BorderFactory.createEmptyBorder());
+			bold.setContentAreaFilled(false);
+			bold.setFocusPainted(false);
+			underline.setBorder(BorderFactory.createEmptyBorder());
+			underline.setContentAreaFilled(false);
+			underline.setFocusPainted(false);
+			
+			italic.setBounds(600, 10, 20, 20);
+			bold.setBounds(620, 10, 20, 20);
+			underline.setBounds(640, 10, 20, 20);
+			
+			// Listeners for italic, bold, underline
+			italic.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					TextStyleListener styleListener = new TextStyleListener(subtitleArea, subtitleTable, "italic");
+				}
+			});
+			
+			bold.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					TextStyleListener styleListener = new TextStyleListener(subtitleArea, subtitleTable,  "bold");
+				}
+			});
+			
+			underline.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					TextStyleListener styleListener = new TextStyleListener(subtitleArea, subtitleTable, "underline");
+				}
+			});
+			//
+			
+			buttonsPane.add(italic);
+			buttonsPane.add(bold);
+			buttonsPane.add(underline);
+			
+			
+		//
+			
 		// Adding mouse listeners for buttons
 			backwardsButton.addMouseListener(new MouseAdapter() {
 			    public void mouseEntered(MouseEvent evt) {
@@ -273,6 +325,37 @@ public class GuiBase {
 			    	forwardsButton.setBorder(BorderFactory.createEmptyBorder());
 			    }
 			});
+			
+			italic.addMouseListener(new MouseAdapter() {
+			    public void mouseEntered(MouseEvent evt) {
+			    	italic.setBorder(BorderFactory.createBevelBorder(0, Color.GREEN, Color.GREEN));
+			    }
+
+			    public void mouseExited(MouseEvent evt) {
+			    	italic.setBorder(BorderFactory.createEmptyBorder());
+			    }
+			});
+			
+			bold.addMouseListener(new MouseAdapter() {
+			    public void mouseEntered(MouseEvent evt) {
+			    	bold.setBorder(BorderFactory.createBevelBorder(0, Color.GREEN, Color.GREEN));
+			    }
+
+			    public void mouseExited(MouseEvent evt) {
+			    	bold.setBorder(BorderFactory.createEmptyBorder());
+			    }
+			});
+			
+			underline.addMouseListener(new MouseAdapter() {
+			    public void mouseEntered(MouseEvent evt) {
+			    	underline.setBorder(BorderFactory.createBevelBorder(0, Color.GREEN, Color.GREEN));
+			    }
+
+			    public void mouseExited(MouseEvent evt) {
+			    	underline.setBorder(BorderFactory.createEmptyBorder());
+			    }
+			});
+			
 		//
 		
 			
@@ -373,6 +456,7 @@ public class GuiBase {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				InsertSubsToTable insertSubsToTable = new InsertSubsToTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField);
+				resizedNew();
 			}
 		});
 		popup.add(insertItem);
@@ -382,7 +466,8 @@ public class GuiBase {
 				
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DeleteSubsFromTable deleteSubsFromTable = new DeleteSubsFromTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField, video.getMediaComponent());
+				DeleteSubsFromTable deleteSubsFromTable = new DeleteSubsFromTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField);
+				resizedNew();
 			}
 		});
 		popup.add(deleteItem);
@@ -451,14 +536,7 @@ public class GuiBase {
 					public void run() {
 						try {
 							fileOpenRead.OpenSubtitles(video.getMediaComponent());
-							if(resizeOpenCount == 0) {
-								frame.setSize(new Dimension(frame.getWidth() + 1,frame.getHeight() + 1));
-								resizeOpenCount++;
-							}
-							else {
-								frame.setSize(new Dimension(frame.getWidth() - 1,frame.getHeight() - 1));
-								resizeOpenCount--;
-							}
+							resizedNew();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -564,7 +642,6 @@ public class GuiBase {
 						RevalidateComponents revalidateComponents = new RevalidateComponents(frame, subtitleNumTextField, startTextField, endTextField, durationTextField, backwardsButton, forwardsButton, changeTextField, synchCheckBox, seekCheckBox, menuBar);
 					}
 				});
-				resizedNew();
 			}
 		});
 		mnVideo.add(mntmOpenVideo);
@@ -573,7 +650,8 @@ public class GuiBase {
 		subtitleTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 	        public void valueChanged(ListSelectionEvent event) {
 	        	if (!event.getValueIsAdjusting()){
-	        		tableListener = new ListenerForTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, endTextField, durationTextField, video.isOpened(), video.getMediaComponent(), seekCheckBox);
+	        		tableListener = new ListenerForTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, endTextField, durationTextField, video.isOpened(), video.getMediaComponent(), seekCheckBox, lastSelectedRow);
+	        		lastSelectedRow = subtitleTable.getSelectedRow();
 	        	}
 	        }
 	    });

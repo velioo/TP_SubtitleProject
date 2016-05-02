@@ -233,12 +233,10 @@ public class ListenerForVideo {
 			mediaPlayerComponent.getMediaPlayer().setFullScreenStrategy(new DefaultAdaptiveRuntimeFullScreenStrategy(frame) {
 					@Override
 					protected void beforeEnterFullScreen() {
-						frame.setSize(new Dimension(frame.getWidth() + 1,frame.getHeight() + 1));
 					}
 
 					@Override
 					protected void afterExitFullScreen() {
-						frame.setSize(new Dimension(frame.getWidth() - 1,frame.getHeight() - 1));
 					}
 			});
 
@@ -268,6 +266,7 @@ public class ListenerForVideo {
 			                	videoPane.setPreferredSize(new Dimension(550 - (height/2 - height/100), 500));
 			                }
 			                mutex.unlock();
+			                
 							menuBar.revalidate();
 							frame.setVisible(true);
 						}

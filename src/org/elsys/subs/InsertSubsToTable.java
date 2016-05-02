@@ -41,6 +41,8 @@ public class InsertSubsToTable {
 					
 					subtitleTable.removeRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
 					subtitleTable.addRowSelectionInterval(currentSelectedRow, currentSelectedRow);
+					subtitleTable.setValueAt("", currentSelectedRow, 3);
+					subtitleArea.setText("");
 					
 					//subtitleArea.grabFocus();
 				}

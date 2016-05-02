@@ -7,17 +7,15 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
-
 
 public class DeleteSubsFromTable {
 	
 	@SuppressWarnings("unused")
-	public DeleteSubsFromTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JTextField durationTextField, JFormattedTextField endTextField, EmbeddedMediaPlayerComponent mediaPlayerComponent) {
+	public DeleteSubsFromTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JTextField durationTextField, JFormattedTextField endTextField) {
 		
 		DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
 		Object[] obj = {"", "", "", "", ""};
-		Integer rowCount = subtitleTable.getSelectedRowCount();
+		Integer selectedRowCount = subtitleTable.getSelectedRowCount();
 		int[] currentSelectedRows;
 		
 
@@ -27,7 +25,7 @@ public class DeleteSubsFromTable {
 				
 				@Override
 				public void run() {
-					for (int i = 0; i < rowCount; i++) {
+					for (int i = 0; i < selectedRowCount; i++) {
 						model.removeRow(currentSelectedRows[i]-i);
 					}
 					
@@ -35,20 +33,24 @@ public class DeleteSubsFromTable {
 						model.setValueAt(i + 1 + "\n", i, 0);
 					}
 					
-					if(subtitleTable.getRowCount() != 0) {
-						if(currentSelectedRows[0] < subtitleTable.getRowCount()) {
+					if(model.getRowCount() != 0) {
+						if(currentSelectedRows[0] != 0) {
+							subtitleTable.addRowSelectionInterval(currentSelectedRows[0] - 1, currentSelectedRows[0] - 1);
+						} else {
 							subtitleTable.addRowSelectionInterval(currentSelectedRows[0], currentSelectedRows[0]);
 						}
-						else {
-							subtitleTable.addRowSelectionInterval(currentSelectedRows[0] - 1, currentSelectedRows[0] - 1);
-						}
+					} else {
+						subtitleArea.setText(null);
+						startTextField.setText("00:00:00,000");
+						startTextField.setValue(new String("00:00:00,000"));
+						endTextField.setText("00:00:02,000");
+						endTextField.setValue(new String("00:00:02,000"));
+						subtitleNumTextField.setEditable(true);
+						subtitleNumTextField.setText("1");
+						subtitleNumTextField.setEditable(false);
+						durationTextField.setText("2");
 					}
 					//subtitleArea.grabFocus();
-					if(mediaPlayerComponent.isValid()) {
-						System.out.println("hello from delete side");
-						TempFile tempFile = new TempFile(subtitleTable);
-						mediaPlayerComponent.getMediaPlayer().setSubTitleFile("temp.srt");
-					}
 				}
 			});
 		}

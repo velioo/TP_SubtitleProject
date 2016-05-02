@@ -31,7 +31,7 @@ public class AddSubs {
 						WriteSubsToTable writeSubsToTable = new WriteSubsToTable(subtitleArea, subtitleTable, subtitleNumTextField ,startTextField, durationTextField, endTextField, synchCheckBox, mediaPlayerComponent);
 						scrollTablePane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {  
 							public void adjustmentValueChanged(AdjustmentEvent e) {
-								if(e.getAdjustable().getMaximum() != prevMax)
+								if((e.getAdjustable().getMaximum() > prevMax) && (subtitleTable.getSelectedRow() == -1))
 									e.getAdjustable().setValue(e.getAdjustable().getMaximum());
 								prevMax = e.getAdjustable().getMaximum();
 							}

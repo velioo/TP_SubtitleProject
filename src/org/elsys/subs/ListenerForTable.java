@@ -18,52 +18,60 @@ import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 public class ListenerForTable {
 	
 	@SuppressWarnings("unused")
-	public ListenerForTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JFormattedTextField endTextField, JTextField durationTextField, boolean videoOpened, EmbeddedMediaPlayerComponent mediaPlayerComponent, JCheckBox seekCheckBox) {
+	public ListenerForTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JFormattedTextField endTextField, JTextField durationTextField, boolean videoOpened, EmbeddedMediaPlayerComponent mediaPlayerComponent, JCheckBox seekCheckBox, int lastSelectedRow) {
 		
 		try {
 			DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
 			int selectedRowIndex = subtitleTable.getSelectedRow();
+			String lastText = subtitleArea.getText();
 			
 			Object[] obj = { "", "", "", "" };
-
-			for (int i = 0; i < 4; i++) {
-				obj[i] = model.getValueAt(selectedRowIndex, i);
-			}
-
-			subtitleNumTextField.setEditable(true);
-			subtitleNumTextField.setText((String) obj[0]);
-			subtitleNumTextField.setEditable(false);
-
-			startTextField.setText((String) obj[1]);
-			startTextField.setValue(new String((String) obj[1]));
-			endTextField.setText((String) obj[2]);
-			endTextField.setValue(new String((String) obj[2]));
-			subtitleArea.setText((String) obj[3]);
-			ListenerForStartEnd startListener = new ListenerForStartEnd(subtitleTable, startTextField, endTextField, durationTextField, selectedRowIndex);
 			
-			if(seekCheckBox.isSelected() && videoOpened == true) {
-				setVideoTime(startTextField, mediaPlayerComponent, true);
-			}
+			if(selectedRowIndex != -1) {
+				for (int i = 0; i < 4; i++) {
+					obj[i] = model.getValueAt(selectedRowIndex, i);
+				}
+	
+				subtitleNumTextField.setEditable(true);
+				subtitleNumTextField.setText((String) obj[0]);
+				subtitleNumTextField.setEditable(false);
+	
+				startTextField.setText((String) obj[1]);
+				startTextField.setValue(new String((String) obj[1]));
+				endTextField.setText((String) obj[2]);
+				endTextField.setValue(new String((String) obj[2]));
+				subtitleArea.setText((String) obj[3]);
+				ListenerForStartEnd startListener = new ListenerForStartEnd(subtitleTable, startTextField, endTextField, durationTextField, selectedRowIndex);
+				
+				if(seekCheckBox.isSelected() && videoOpened == true) {
+					setVideoTime(startTextField, mediaPlayerComponent, true);
+				}
+				
+				MouseListener listeners [] = subtitleTable.getMouseListeners();
+				
+				if(listeners.length == 4)
+					subtitleTable.removeMouseListener(listeners[3]);
+				
+				subtitleTable.addMouseListener(new MouseAdapter() {
+				    public void mouseClicked(MouseEvent event) {
+				    	if(SwingUtilities.isLeftMouseButton(event)) {
+				    		if (event.getClickCount() == 2 && videoOpened == true && !seekCheckBox.isSelected()) {
+				    			setVideoTime(startTextField, mediaPlayerComponent, false);
+				    		}
+				    	}
+				    }
+				});
 			
-			MouseListener listeners [] = subtitleTable.getMouseListeners();
-			
-			if(listeners.length == 4)
-				subtitleTable.removeMouseListener(listeners[3]);
-			
-			subtitleTable.addMouseListener(new MouseAdapter() {
-			    public void mouseClicked(MouseEvent event) {
-			    	if(SwingUtilities.isLeftMouseButton(event)) {
-			    		if (event.getClickCount() == 2 && videoOpened == true && !seekCheckBox.isSelected()) {
-			    			setVideoTime(startTextField, mediaPlayerComponent, false);
-			    		}
-			    	}
-			    }
-			});
-			
+			if(lastSelectedRow != -1)
+				model.setValueAt(lastText, lastSelectedRow, 3);
+				
+		}
 			
 		} catch(Exception e) {
+			e.printStackTrace();
 			System.out.println("Nothing!");
 		}
+		
 		
 	}
 	
