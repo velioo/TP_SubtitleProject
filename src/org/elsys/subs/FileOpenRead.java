@@ -42,7 +42,7 @@ public class FileOpenRead {
 			detector.dataEnd();
 			String encoding = detector.getDetectedCharset();
 			
-			System.out.println(encoding);
+			//System.out.println(encoding);
 			
 			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(chooser.getSelectedFile().getAbsolutePath()), encoding));
 			String line;
@@ -52,7 +52,6 @@ public class FileOpenRead {
 			model.setRowCount(0);
 			
 			while ((line = reader.readLine()) != null) {
-				System.out.println(line);
 				if (line.trim().length() > 0) {
 					if(isNextSub(reader, line)) {
 						if(step != 0) 
@@ -86,6 +85,7 @@ public class FileOpenRead {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private boolean isNextSub(BufferedReader reader, String line) throws IOException {
 		BufferedReader r = reader;
 		String l1 = line, l2;

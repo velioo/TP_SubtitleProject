@@ -655,6 +655,8 @@ public class GuiBase {
 	        	}
 	        }
 	    });
+		
+		subtitleTable.addKeyListener(new TableKeyListener(subtitleTable));
 		//
 		
 		// Adding subtitle to JTable	
@@ -688,6 +690,19 @@ public class GuiBase {
 		
 		InitialFocusSetter.setInitialFocus(frame, subtitleArea);
 		//frame.pack();
+		frame.addWindowListener(new WindowAdapter() { 
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(video.getMediaComponent().isValid()) {
+					video.closeVideo();
+				}
+				File f = new File("temp.srt");
+				if(f.exists() && !f.isDirectory()) {
+					f.delete();
+				}
+			}
+		});
 		
 	}
 	
@@ -722,7 +737,7 @@ public class GuiBase {
 				e.getWindow().removeWindowListener(this);
 
 			}
-
 		}
 	}
+	
 }

@@ -64,7 +64,7 @@ public class ListenerForTable {
 			
 			if(lastSelectedRow != -1)
 				model.setValueAt(lastText, lastSelectedRow, 3);
-				
+			
 		}
 			
 		} catch(Exception e) {
