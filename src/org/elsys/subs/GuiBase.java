@@ -71,14 +71,12 @@ public class GuiBase {
 	private int lastSelectedRow = -1;
 	private JPopupMenu popup = new JPopupMenu();
 	private int resizeNewCount = 0;
-	
 	public GuiBase() {
 		initialize();
 	}
 
 	@SuppressWarnings("unused")
 	private void initialize() {
-		
 		frame = new JFrame();
 		frame.setTitle("Subtitle Magic");
 		frame.setBounds(100, 100, 1100, 700);
@@ -185,6 +183,10 @@ public class GuiBase {
 		JScrollPane scrollTablePane = new JScrollPane(subtitleTable);
 		tablePanel.add(scrollTablePane, BorderLayout.CENTER);
 		scrollTablePane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{subtitleTable}));
+		
+		//To use the tableKeyListener for the menu
+		TableKeyListener tableKeyListener = new TableKeyListener(subtitleTable);
+		//
 		
 		// Run it 1 time to set duration textfield
 			currentSelectedRow = subtitleTable.getSelectedRow();
@@ -447,6 +449,9 @@ public class GuiBase {
 			
 			
 		//
+		DeleteSubsFromTable deleteSubsFromTable = new DeleteSubsFromTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField);
+		InsertSubsToTable insertSubsToTable = new InsertSubsToTable(subtitleArea, subtitleTable); // , subtitleNumTextField, startTextField, durationTextField, endTextField
+		
 		JMenuItem deleteItem;
 		JMenuItem insertItem;
 		    
@@ -455,7 +460,7 @@ public class GuiBase {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				InsertSubsToTable insertSubsToTable = new InsertSubsToTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField);
+				insertSubsToTable.insert();
 				resizedNew();
 			}
 		});
@@ -466,7 +471,7 @@ public class GuiBase {
 				
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DeleteSubsFromTable deleteSubsFromTable = new DeleteSubsFromTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField);
+				deleteSubsFromTable.delete();
 				resizedNew();
 			}
 		});
@@ -587,7 +592,16 @@ public class GuiBase {
 		JMenu mnEdit = new JMenu("  Edit  ");
 		menuBar.add(mnEdit);
 
+		//UndoListener
+		UndoListener undoListener = new UndoListener(subtitleTable, subtitleArea);
+		//
+		
 		JMenuItem mntmUndo = new JMenuItem("Undo");
+		mntmUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				undoListener.undo();
+			}
+		});
 		mnEdit.add(mntmUndo);
 
 		JMenuItem mntmRedo = new JMenuItem("Redo");
@@ -597,9 +611,19 @@ public class GuiBase {
 		mnEdit.add(mntmCutLines);
 
 		JMenuItem mntmCopyLines = new JMenuItem("Copy Lines");
+		mntmCopyLines.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tableKeyListener.copy();
+			}
+		});
 		mnEdit.add(mntmCopyLines);
 
 		JMenuItem mntmPasteLines = new JMenuItem("Paste Lines");
+		mntmPasteLines.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tableKeyListener.paste();
+			}
+		});
 		mnEdit.add(mntmPasteLines);
 
 		JSeparator editSeparator1 = new JSeparator();
@@ -614,13 +638,31 @@ public class GuiBase {
 		JMenu mnSubtitle = new JMenu("Subtitle");
 		menuBar.add(mnSubtitle);
 
+		JMenuItem mntmInsertLine = new JMenuItem("Insert Line");
+		mntmInsertLine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				insertSubsToTable.insert();
+			}	
+		});
+		mnSubtitle.add(mntmInsertLine);
+		
 		JMenuItem mntmDeleteLines = new JMenuItem("Delete Lines");
+		mntmDeleteLines.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				deleteSubsFromTable.delete();
+			}	
+		});
 		mnSubtitle.add(mntmDeleteLines);
 
 		JSeparator subtitlesSeparator1 = new JSeparator();
 		mnSubtitle.add(subtitlesSeparator1);
 
 		JMenuItem mntmSelectAll = new JMenuItem("Select All");
+		mntmSelectAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				subtitleTable.addRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
+			}	
+		});
 		mnSubtitle.add(mntmSelectAll);
 
 		JMenu mnVideo = new JMenu(" Video ");

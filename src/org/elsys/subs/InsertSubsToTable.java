@@ -1,18 +1,31 @@
 package org.elsys.subs;
 
-import javax.swing.JFormattedTextField;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 
 public class InsertSubsToTable {
 	
+	private JTextArea subtitleArea;
+	private JTable subtitleTable;
+	//private JTextField subtitleNumTextField;
+	//private JFormattedTextField startTextField;
+	//private JTextField durationTextField;
+	//private JFormattedTextField endTextField;
+	// , JTextField subtitleNumTextField, JFormattedTextField startTextField, JTextField durationTextField, JFormattedTextField endTextField
+	public InsertSubsToTable(JTextArea subtitleArea, JTable subtitleTable) {
+		this.subtitleArea = subtitleArea;
+		this.subtitleTable = subtitleTable;
+		//this.subtitleNumTextField = subtitleNumTextField;
+		//this.startTextField = startTextField;
+		//this.durationTextField = durationTextField;
+		//this.endTextField = endTextField;
+	}
+	
 	@SuppressWarnings("unused")
-	public InsertSubsToTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JTextField durationTextField, JFormattedTextField endTextField) {
-		
+	protected void insert(){
 		DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
 		Object[] obj = {"", "", "", ""};
 		Integer rowCount = subtitleTable.getSelectedRowCount();
@@ -48,6 +61,32 @@ public class InsertSubsToTable {
 				}
 			});
 		}
+	}
+	
+	@SuppressWarnings("unused")
+	protected void insert(boolean isUndoable, String[] splitedArgs) {
+		DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
+		Object[] obj = {"", "", "", ""};
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				splitedArgs[3] = splitedArgs[3] + "\n";
+				model.insertRow(Integer.parseInt(splitedArgs[0]), splitedArgs);
+				
+				for (int i = 0; i < subtitleTable.getRowCount(); i++) {
+					model.setValueAt(i + 1 + "\n", i, 0);
+				}
+				
+				subtitleTable.removeRowSelectionInterval(Integer.parseInt(splitedArgs[0]), Integer.parseInt(splitedArgs[0]));
+				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]) + 1, Integer.parseInt(splitedArgs[0]) + 1);
+				subtitleTable.removeRowSelectionInterval(Integer.parseInt(splitedArgs[0]) + 1, Integer.parseInt(splitedArgs[0]) + 1);
+				subtitleTable.removeRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
+				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]), Integer.parseInt(splitedArgs[0]));
+				//subtitleArea.grabFocus();
+			}
+		});
+		
 	}
 
 }

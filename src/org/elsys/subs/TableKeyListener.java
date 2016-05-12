@@ -13,7 +13,6 @@ public class TableKeyListener implements KeyListener{
 	private int keyCtrl = 17, keyV = 86, keyC = 67, keyX = 88;
 	private boolean valueCtrl = false, valueV = false, valueC = false, valueX = false;
 	private JTable subtitleTable;
-	protected int pasteValue = 0;
 	
 	public TableKeyListener(JTable subtitleTable) {
 		this.subtitleTable = subtitleTable;
@@ -37,6 +36,7 @@ public class TableKeyListener implements KeyListener{
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
+		//System.out.println(e.getKeyCode());
 		if(keyCtrl == e.getKeyCode()) {
 			valueCtrl = true;
 		}
@@ -51,18 +51,18 @@ public class TableKeyListener implements KeyListener{
 		}
 		
 		if(valueCtrl == true && valueC == true) {
-			System.out.println("Ctrl + C");
+			//System.out.println("Ctrl + C");
 			copy();
-			
 		}
 		if(valueCtrl == true && valueV == true) {
-			System.out.println("Ctrl + V");
+			//System.out.println("Ctrl + V");
 			paste();
 		}
 		if(valueCtrl == true && valueX == true) {
-			System.out.println("Ctrl + X");
+			//System.out.println("Ctrl + X");
 			cut();
 		}
+
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class TableKeyListener implements KeyListener{
 					for (int i = 0; i < 4; i++) {
 						obj[i] = model.getValueAt(selectedRowIndex, i);
 					}
-					System.out.println(obj[0] + ", " + obj[1] + "," + obj[2] + ", " + obj[3]);
+					//System.out.println(obj[0] + ", " + obj[1] + "," + obj[2] + ", " + obj[3]);
 				}
 			}
 		});
@@ -93,31 +93,33 @@ public class TableKeyListener implements KeyListener{
 
 			@Override
 			public void run() {
-				DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
-				int selectedRowIndex = subtitleTable.getSelectedRow();
-
-				System.out.println(obj[0] + ", " + obj[1] + "," + obj[2] + ", " + obj[3]);
-				if(selectedRowIndex == -1) {
-					return;
-				} else {
-					model.insertRow(selectedRowIndex, obj);
-					
-					for (int i = 0; i < subtitleTable.getRowCount(); i++) {
-						model.setValueAt(i + 1 + "\n", i, 0);
+				if(obj != null) {
+					DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
+					int selectedRowIndex = subtitleTable.getSelectedRow();
+	
+					//System.out.println(obj[0] + ", " + obj[1] + "," + obj[2] + ", " + obj[3]);
+					if(selectedRowIndex == -1) {
+						return;
+					} else {
+						model.insertRow(selectedRowIndex, obj);
+						
+						for (int i = 0; i < subtitleTable.getRowCount(); i++) {
+							model.setValueAt(i + 1 + "\n", i, 0);
+						}
+						
+						subtitleTable.removeRowSelectionInterval(selectedRowIndex, selectedRowIndex);
+						subtitleTable.addRowSelectionInterval(selectedRowIndex + 1, selectedRowIndex + 1);
+						subtitleTable.removeRowSelectionInterval(selectedRowIndex + 1, selectedRowIndex + 1);
+						subtitleTable.removeRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
+						subtitleTable.addRowSelectionInterval(selectedRowIndex, selectedRowIndex);
 					}
-					
-					subtitleTable.removeRowSelectionInterval(selectedRowIndex, selectedRowIndex);
-					subtitleTable.addRowSelectionInterval(selectedRowIndex + 1, selectedRowIndex + 1);
-					subtitleTable.removeRowSelectionInterval(selectedRowIndex + 1, selectedRowIndex + 1);
-					subtitleTable.removeRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
-					subtitleTable.addRowSelectionInterval(selectedRowIndex, selectedRowIndex);
 				}
 			}
 		});
 
 	}
 	
-	public void cut() {
+	private void cut() {
 		
 	}
 }

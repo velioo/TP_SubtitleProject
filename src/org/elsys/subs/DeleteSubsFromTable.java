@@ -10,9 +10,24 @@ import javax.swing.table.DefaultTableModel;
 
 public class DeleteSubsFromTable {
 	
-	@SuppressWarnings("unused")
+	private JTextArea subtitleArea;
+	private JTable subtitleTable;
+	private JTextField subtitleNumTextField;
+	private JFormattedTextField startTextField;
+	private JTextField durationTextField;
+	private JFormattedTextField endTextField;
+	
 	public DeleteSubsFromTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JTextField durationTextField, JFormattedTextField endTextField) {
-		
+		this.subtitleArea = subtitleArea;
+		this.subtitleTable = subtitleTable;
+		this.subtitleNumTextField = subtitleNumTextField;
+		this.startTextField = startTextField;
+		this.durationTextField = durationTextField;
+		this.endTextField = endTextField;
+	}
+	
+	@SuppressWarnings("unused")
+	protected void delete() {
 		DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
 		Object[] obj = {"", "", "", "", ""};
 		Integer selectedRowCount = subtitleTable.getSelectedRowCount();
@@ -21,6 +36,16 @@ public class DeleteSubsFromTable {
 
 		if(subtitleTable.getSelectedRow() != -1) {
 			currentSelectedRows = subtitleTable.getSelectedRows();
+			
+			String temp = "del|";
+			
+			for(Integer i = 0; i < currentSelectedRows.length; i++) {
+				temp = temp + currentSelectedRows[i] + "|" + subtitleTable.getValueAt(currentSelectedRows[i], 1) + "|" + 
+				subtitleTable.getValueAt(currentSelectedRows[i], 2) + "|" + subtitleTable.getValueAt(currentSelectedRows[i], 3);
+			}
+			
+			UndoListener.undoStack.push(temp);
+			
 			SwingUtilities.invokeLater(new Runnable() {
 				
 				@Override
@@ -53,6 +78,7 @@ public class DeleteSubsFromTable {
 					//subtitleArea.grabFocus();
 				}
 			});
+			
 		}
 	}
 
