@@ -4,18 +4,34 @@ import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JFormattedTextField;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class TableKeyListener implements KeyListener{
 
 	private static Object[] obj = { "", "", "", "" };
-	private int keyCtrl = 17, keyV = 86, keyC = 67, keyX = 88;
-	private boolean valueCtrl = false, valueV = false, valueC = false, valueX = false;
+	private int keyCtrl = 17, keyV = 86, keyC = 67, keyX = 88, keyZ = 90;
+	private boolean valueCtrl = false, valueV = false, valueC = false, valueX = false, valueZ = false;
+	private boolean cut = false;
 	private JTable subtitleTable;
+	private JTextArea subtitleArea;
+	private JTextField subtitleNumTextField;
+	private JFormattedTextField startTextField;
+	private JTextField durationTextField;
+	private JFormattedTextField endTextField;
+	private UndoListener undoListener = null;
 	
-	public TableKeyListener(JTable subtitleTable) {
+	public TableKeyListener(JTable subtitleTable, JTextArea subtitleArea, JTextField subtitleNumTextField, JFormattedTextField startTextField, JTextField durationTextField, JFormattedTextField endTextField) {
 		this.subtitleTable = subtitleTable;
+		this.subtitleArea = subtitleArea;
+		this.subtitleNumTextField = subtitleNumTextField;
+		this.startTextField = startTextField;
+		this.durationTextField = durationTextField;
+		this.endTextField = endTextField;
+		this.undoListener = new UndoListener(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField);
 	}
 
 	@Override
@@ -31,6 +47,9 @@ public class TableKeyListener implements KeyListener{
 		}
 		if(keyX == e.getKeyCode()) {
 			valueX = false;
+		}
+		if(keyZ == e.getKeyCode()) {
+			valueZ = false;
 		}
 	}
 	
@@ -49,6 +68,9 @@ public class TableKeyListener implements KeyListener{
 		if(keyX == e.getKeyCode()) {
 			valueX = true;
 		}
+		if(keyZ == e.getKeyCode()) {
+			valueZ = true;
+		}
 		
 		if(valueCtrl == true && valueC == true) {
 			//System.out.println("Ctrl + C");
@@ -62,6 +84,10 @@ public class TableKeyListener implements KeyListener{
 			//System.out.println("Ctrl + X");
 			cut();
 		}
+		if(valueCtrl == true && valueZ == true) {
+			//System.out.println("Ctrl + Z");
+			undoListener.undo();
+		}
 
 	}
 
@@ -71,10 +97,17 @@ public class TableKeyListener implements KeyListener{
 	public void copy() {
 		EventQueue.invokeLater(new Runnable() {
 
+			@SuppressWarnings("unused")
 			@Override
 			public void run() {
 				DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
 				int selectedRowIndex = subtitleTable.getSelectedRow();
+				
+				obj = new Object[4];
+				
+				for(Object o : obj)
+					o = "";
+				
 				if(selectedRowIndex == -1) {
 					return;
 				} else {
@@ -101,6 +134,17 @@ public class TableKeyListener implements KeyListener{
 					if(selectedRowIndex == -1) {
 						return;
 					} else {
+						
+						String temp = "ins|";
+						
+						temp = temp + selectedRowIndex + "|" + subtitleTable.getValueAt(selectedRowIndex, 1) + "|" + 
+						subtitleTable.getValueAt(selectedRowIndex, 2) + "|";
+						String temp3 = subtitleTable.getValueAt(selectedRowIndex, 3).toString();
+						temp3 = temp3.replaceAll("\n", "");
+						temp = temp + temp3 + "\n";
+						
+						UndoListener.undoStack.push(temp);
+						
 						model.insertRow(selectedRowIndex, obj);
 						
 						for (int i = 0; i < subtitleTable.getRowCount(); i++) {
@@ -113,6 +157,10 @@ public class TableKeyListener implements KeyListener{
 						subtitleTable.removeRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
 						subtitleTable.addRowSelectionInterval(selectedRowIndex, selectedRowIndex);
 					}
+					if(cut == true) {
+						cut = false;
+						obj = null;
+					}
 				}
 			}
 		});
@@ -120,6 +168,9 @@ public class TableKeyListener implements KeyListener{
 	}
 	
 	private void cut() {
-		
+		copy();
+		DeleteSubsFromTable deleteSubsFromTable = new DeleteSubsFromTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField);
+		deleteSubsFromTable.delete();
+		cut = true;
 	}
 }

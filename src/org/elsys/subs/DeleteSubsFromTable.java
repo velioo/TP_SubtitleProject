@@ -41,7 +41,10 @@ public class DeleteSubsFromTable {
 			
 			for(Integer i = 0; i < currentSelectedRows.length; i++) {
 				temp = temp + currentSelectedRows[i] + "|" + subtitleTable.getValueAt(currentSelectedRows[i], 1) + "|" + 
-				subtitleTable.getValueAt(currentSelectedRows[i], 2) + "|" + subtitleTable.getValueAt(currentSelectedRows[i], 3);
+				subtitleTable.getValueAt(currentSelectedRows[i], 2) + "|";
+				String temp3 = subtitleTable.getValueAt(currentSelectedRows[i], 3).toString();
+				temp3 = temp3.replaceAll("\n", "");
+				temp = temp + temp3 + "\n";
 			}
 			
 			UndoListener.undoStack.push(temp);
@@ -80,6 +83,27 @@ public class DeleteSubsFromTable {
 			});
 			
 		}
+	}
+	
+	@SuppressWarnings("unused")
+	protected void delete(boolean isUndoable, String[] splitedArgs) {
+		DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
+		Object[] obj = {"", "", "", ""};
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				splitedArgs[3] = splitedArgs[3] + "\n";
+				model.removeRow(Integer.parseInt(splitedArgs[1]));
+				
+				for (int i = 0; i < subtitleTable.getRowCount(); i++) {
+					model.setValueAt(i + 1 + "\n", i, 0);
+				}
+				
+				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[1]), Integer.parseInt(splitedArgs[1]));
+			}
+		});
+		
 	}
 
 }

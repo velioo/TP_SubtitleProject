@@ -35,6 +35,16 @@ public class InsertSubsToTable {
 		if(subtitleTable.getSelectedRow() != -1) {
 			currentSelectedRow = subtitleTable.getSelectedRow();
 			prevRow = currentSelectedRow - 1;
+			
+			String temp = "ins|";
+			
+			temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
+			subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
+			String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
+			temp3 = temp3.replaceAll("\n", "");
+			temp = temp + temp3 + "\n";
+			
+			UndoListener.undoStack.push(temp);
 			SwingUtilities.invokeLater(new Runnable() {
 				
 				@Override
@@ -57,7 +67,6 @@ public class InsertSubsToTable {
 					subtitleTable.setValueAt("", currentSelectedRow, 3);
 					subtitleArea.setText("");
 					
-					//subtitleArea.grabFocus();
 				}
 			});
 		}
@@ -79,11 +88,9 @@ public class InsertSubsToTable {
 				}
 				
 				subtitleTable.removeRowSelectionInterval(Integer.parseInt(splitedArgs[0]), Integer.parseInt(splitedArgs[0]));
-				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]) + 1, Integer.parseInt(splitedArgs[0]) + 1);
-				subtitleTable.removeRowSelectionInterval(Integer.parseInt(splitedArgs[0]) + 1, Integer.parseInt(splitedArgs[0]) + 1);
+				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]), Integer.parseInt(splitedArgs[0]));
 				subtitleTable.removeRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
 				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]), Integer.parseInt(splitedArgs[0]));
-				//subtitleArea.grabFocus();
 			}
 		});
 		

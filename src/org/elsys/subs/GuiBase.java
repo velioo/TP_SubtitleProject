@@ -185,7 +185,7 @@ public class GuiBase {
 		scrollTablePane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{subtitleTable}));
 		
 		//To use the tableKeyListener for the menu
-		TableKeyListener tableKeyListener = new TableKeyListener(subtitleTable);
+		TableKeyListener tableKeyListener = new TableKeyListener(subtitleTable,subtitleArea, subtitleNumTextField, startTextField, durationTextField, endTextField);
 		//
 		
 		// Run it 1 time to set duration textfield
@@ -593,7 +593,7 @@ public class GuiBase {
 		menuBar.add(mnEdit);
 
 		//UndoListener
-		UndoListener undoListener = new UndoListener(subtitleTable, subtitleArea);
+		UndoListener undoListener = new UndoListener(subtitleArea, subtitleTable, endTextField, startTextField, durationTextField, endTextField);
 		//
 		
 		JMenuItem mntmUndo = new JMenuItem("Undo");
@@ -698,7 +698,7 @@ public class GuiBase {
 	        }
 	    });
 		
-		subtitleTable.addKeyListener(new TableKeyListener(subtitleTable));
+		subtitleTable.addKeyListener(new TableKeyListener(subtitleTable,subtitleArea, subtitleNumTextField, startTextField, durationTextField, endTextField));
 		//
 		
 		// Adding subtitle to JTable	

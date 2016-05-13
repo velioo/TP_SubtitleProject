@@ -22,6 +22,16 @@ public class WriteSubsToTable {
 		Integer rowCount = subtitleTable.getRowCount();
 		int currentSelectedRow = subtitleTable.getSelectedRow();
 
+		String temp = "chg|";
+		
+		temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
+		subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
+		String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
+		temp3 = temp3.replaceAll("\n", "");
+		temp = temp + temp3 + "\n";
+		
+		UndoListener.undoStack.push(temp);
+		
 		if(subtitleTable.getSelectedRow() == -1) {
 			
 			if(synchCheckBox.isSelected() && mediaPlayerComponent.isValid()) {
@@ -96,7 +106,10 @@ public class WriteSubsToTable {
 			
 			obj[0] = rowCount + 1 + "\n";
 			obj[2] = endTextField.getText();
-			obj[3] = subtitleArea.getText() + "\n";
+			if(!subtitleArea.getText().toString().endsWith(" "))
+				obj[3] = subtitleArea.getText() + "\n";
+			else 
+				obj[3] = subtitleArea.getText();
 			
 			model.addRow(obj);
 			
@@ -110,7 +123,10 @@ public class WriteSubsToTable {
 			obj[0] = getRow.toString() + "\n";
 			obj[1] = startTextField.getText();
 			obj[2] = endTextField.getText();
-			obj[3] = subtitleArea.getText() + "\n";
+			if(!subtitleArea.getText().toString().endsWith(" "))
+				obj[3] = subtitleArea.getText() + "\n";
+			else 
+				obj[3] = subtitleArea.getText();
 			
 			for(int i = 0; i < 4; i++) 
 				model.setValueAt(obj[i], columnNum, i);

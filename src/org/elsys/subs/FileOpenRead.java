@@ -42,9 +42,16 @@ public class FileOpenRead {
 			detector.dataEnd();
 			String encoding = detector.getDetectedCharset();
 			
-			//System.out.println(encoding);
+			BufferedReader reader = null;
 			
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(chooser.getSelectedFile().getAbsolutePath()), encoding));
+			if (encoding != null) {
+				reader = new BufferedReader(new InputStreamReader(new FileInputStream(chooser.getSelectedFile().getAbsolutePath()), encoding));
+			} else {
+				reader = new BufferedReader(new InputStreamReader(new FileInputStream(chooser.getSelectedFile().getAbsolutePath()), "UTF-8"));
+			}
+			
+			System.out.println(encoding);
+			
 			String line;
 			Object[] obj = {"", "", "", ""};
 			int i = 0, step = 0, nextSubNum = 0;
@@ -52,6 +59,11 @@ public class FileOpenRead {
 			model.setRowCount(0);
 			
 			while ((line = reader.readLine()) != null) {
+				if (encoding == "UTF-8" && step == 0){
+					System.out.println(line);
+					line = line.substring(1);
+					System.out.println(line);
+				}
 				if (line.trim().length() > 0) {
 					if(isNextSub(reader, line)) {
 						if(step != 0) 
