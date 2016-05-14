@@ -62,8 +62,8 @@ public class ListenerForTable {
 				    }
 				});
 			
-			if(lastSelectedRow != -1)
-				model.setValueAt(lastText, lastSelectedRow, 3);
+			//if(lastSelectedRow != -1 && !DeleteSubsFromTable.isForOn)
+				//model.setValueAt(lastText, lastSelectedRow, 3);
 			
 		}
 			

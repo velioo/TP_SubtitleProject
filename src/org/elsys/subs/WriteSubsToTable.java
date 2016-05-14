@@ -14,6 +14,7 @@ import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 
 public class WriteSubsToTable {
 	private int clear = 0;
+	private String temp;
 	@SuppressWarnings("unused")
 	public WriteSubsToTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JTextField durationTextField, JFormattedTextField endTextField, JCheckBox synchCheckBox, EmbeddedMediaPlayerComponent mediaPlayerComponent) {
 		clear = 0;
@@ -21,16 +22,17 @@ public class WriteSubsToTable {
 		Object[] obj = {"", "", "", ""};
 		Integer rowCount = subtitleTable.getRowCount();
 		int currentSelectedRow = subtitleTable.getSelectedRow();
-
-		String temp = "chg|";
 		
-		temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
-		subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
-		String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
-		temp3 = temp3.replaceAll("\n", "");
-		temp = temp + temp3 + "\n";
-		
-		UndoListener.undoStack.push(temp);
+		if(currentSelectedRow != -1) {
+			temp = "chg|";
+			
+			temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
+			subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
+			String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
+			temp3 = temp3.replaceAll("\n", "");
+			temp = temp + temp3 + "\n";
+			
+		}
 		
 		if(subtitleTable.getSelectedRow() == -1) {
 			
@@ -141,6 +143,16 @@ public class WriteSubsToTable {
 			}
 		}
 		
+		if(currentSelectedRow != -1) {
+			
+			temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
+			subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
+			String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
+			temp3 = temp3.replaceAll("\n", "");
+			temp = temp + temp3 + "\n";
+			
+			UndoListener.undoStack.push(temp);
+		}
 		
 		if(mediaPlayerComponent.isValid()) {
 			TempFile tempFile = new TempFile(subtitleTable);

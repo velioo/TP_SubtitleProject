@@ -13,8 +13,8 @@ import javax.swing.table.DefaultTableModel;
 public class TableKeyListener implements KeyListener{
 
 	private static Object[] obj = { "", "", "", "" };
-	private int keyCtrl = 17, keyV = 86, keyC = 67, keyX = 88, keyZ = 90;
-	private boolean valueCtrl = false, valueV = false, valueC = false, valueX = false, valueZ = false;
+	private int keyCtrl = 17, keyV = 86, keyC = 67, keyX = 88, keyZ = 90, keyY = 89;
+	private boolean valueCtrl = false, valueV = false, valueC = false, valueX = false, valueZ = false, valueY = false;
 	private boolean cut = false;
 	private JTable subtitleTable;
 	private JTextArea subtitleArea;
@@ -51,6 +51,9 @@ public class TableKeyListener implements KeyListener{
 		if(keyZ == e.getKeyCode()) {
 			valueZ = false;
 		}
+		if(keyY == e.getKeyCode()) {
+			valueY = false;
+		}
 	}
 	
 	@Override
@@ -71,6 +74,9 @@ public class TableKeyListener implements KeyListener{
 		if(keyZ == e.getKeyCode()) {
 			valueZ = true;
 		}
+		if(keyY == e.getKeyCode()) {
+			valueY = true;
+		}
 		
 		if(valueCtrl == true && valueC == true) {
 			//System.out.println("Ctrl + C");
@@ -87,6 +93,10 @@ public class TableKeyListener implements KeyListener{
 		if(valueCtrl == true && valueZ == true) {
 			//System.out.println("Ctrl + Z");
 			undoListener.undo();
+		}
+		if(valueCtrl == true && valueY == true) {
+			//System.out.println("Ctrl + Z");
+			undoListener.redo();
 		}
 
 	}

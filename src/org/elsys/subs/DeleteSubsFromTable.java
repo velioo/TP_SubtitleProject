@@ -16,6 +16,7 @@ public class DeleteSubsFromTable {
 	private JFormattedTextField startTextField;
 	private JTextField durationTextField;
 	private JFormattedTextField endTextField;
+	public static boolean isForOn = false;
 	
 	public DeleteSubsFromTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JTextField durationTextField, JFormattedTextField endTextField) {
 		this.subtitleArea = subtitleArea;
@@ -53,9 +54,14 @@ public class DeleteSubsFromTable {
 				
 				@Override
 				public void run() {
+					
+					isForOn = true;
+					
 					for (int i = 0; i < selectedRowCount; i++) {
 						model.removeRow(currentSelectedRows[i]-i);
 					}
+					
+					isForOn = false;
 					
 					for (int i = 0; i < subtitleTable.getRowCount(); i++) {
 						model.setValueAt(i + 1 + "\n", i, 0);
@@ -86,24 +92,27 @@ public class DeleteSubsFromTable {
 	}
 	
 	@SuppressWarnings("unused")
-	protected void delete(boolean isUndoable, String[] splitedArgs) {
+	protected void delete(boolean isRedoAble, String[] splitedArgs, int i) throws IllegalArgumentException{
 		DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
 		Object[] obj = {"", "", "", ""};
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				
 				splitedArgs[3] = splitedArgs[3] + "\n";
-				model.removeRow(Integer.parseInt(splitedArgs[1]));
+				model.removeRow(Integer.parseInt(splitedArgs[0]) - i);
 				
 				for (int i = 0; i < subtitleTable.getRowCount(); i++) {
 					model.setValueAt(i + 1 + "\n", i, 0);
 				}
 				
-				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[1]), Integer.parseInt(splitedArgs[1]));
+				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]) - i, Integer.parseInt(splitedArgs[0]) - i);
 			}
 		});
 		
 	}
+	
+	
 
 }

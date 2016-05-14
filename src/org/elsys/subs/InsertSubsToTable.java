@@ -36,19 +36,13 @@ public class InsertSubsToTable {
 			currentSelectedRow = subtitleTable.getSelectedRow();
 			prevRow = currentSelectedRow - 1;
 			
-			String temp = "ins|";
-			
-			temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
-			subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
-			String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
-			temp3 = temp3.replaceAll("\n", "");
-			temp = temp + temp3 + "\n";
-			
-			UndoListener.undoStack.push(temp);
 			SwingUtilities.invokeLater(new Runnable() {
 				
 				@Override
 				public void run() {
+					
+					DeleteSubsFromTable.isForOn = true;
+					
 					if (prevRow < 0) {
 						obj[1] = model.getValueAt(currentSelectedRow, 2);
 					} else {
@@ -56,7 +50,21 @@ public class InsertSubsToTable {
 					}
 					obj[2] = model.getValueAt(currentSelectedRow, 1);
 					
+					obj[3] = " ";
+					
 					model.insertRow(currentSelectedRow, obj);
+					
+					String temp = "ins|";
+					
+					temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
+					subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
+					String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
+					temp3 = temp3.replaceAll("\n", "");
+					temp = temp + temp3 + "\n";
+					
+					UndoListener.undoStack.push(temp);
+					
+					DeleteSubsFromTable.isForOn = false;
 					
 					for (int i = 0; i < subtitleTable.getRowCount(); i++) {
 						model.setValueAt(i + 1 + "\n", i, 0);
@@ -64,18 +72,15 @@ public class InsertSubsToTable {
 					
 					subtitleTable.removeRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
 					subtitleTable.addRowSelectionInterval(currentSelectedRow, currentSelectedRow);
-					subtitleTable.setValueAt("", currentSelectedRow, 3);
+					subtitleTable.setValueAt(" ", currentSelectedRow, 3);
 					subtitleArea.setText("");
-					
 				}
 			});
 		}
 	}
 	
-	@SuppressWarnings("unused")
 	protected void insert(boolean isUndoable, String[] splitedArgs) {
 		DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
-		Object[] obj = {"", "", "", ""};
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

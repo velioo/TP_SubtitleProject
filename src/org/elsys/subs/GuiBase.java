@@ -605,6 +605,11 @@ public class GuiBase {
 		mnEdit.add(mntmUndo);
 
 		JMenuItem mntmRedo = new JMenuItem("Redo");
+		mntmRedo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				undoListener.redo();
+			}
+		});
 		mnEdit.add(mntmRedo);
 
 		JMenuItem mntmCutLines = new JMenuItem("Cut Lines");
