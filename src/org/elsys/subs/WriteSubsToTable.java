@@ -132,6 +132,8 @@ public class WriteSubsToTable {
 				
 			}
 			
+			System.out.println("Temp3 = " + temp3);
+			
 			clear = 1;
 			int columnNum;
 			columnNum = subtitleTable.getSelectedRow();
@@ -163,6 +165,8 @@ public class WriteSubsToTable {
 				String temp4 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
 				temp4 = temp4.replaceAll("\n", "");
 				temp = temp + temp4 + "\n";
+				
+				System.out.println("Temp4 = " + temp4);
 				
 				if(!temp3.equals(temp4)) {
 					System.out.println("It's not equal");

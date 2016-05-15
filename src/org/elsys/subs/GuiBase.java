@@ -672,13 +672,12 @@ public class GuiBase {
 
 		JMenu mnVideo = new JMenu(" Video ");
 		menuBar.add(mnVideo);
-		
 		video = new ListenerForVideo(othersPanel, tablePanel, textPane, frame, scrollTablePane, menuBar);
 		JMenuItem mntmOpenVideo = new JMenuItem("Open Video...");
 		mntmOpenVideo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				KeyListener listeners[] = subtitleArea.getKeyListeners();
-				subtitleArea.removeKeyListener(listeners[1]);
+				subtitleArea.removeKeyListener(listeners[2]);
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						video.closeVideo();
@@ -736,8 +735,8 @@ public class GuiBase {
 
 		JMenuItem mntmOptions = new JMenuItem("Options");
 		mnView.add(mntmOptions);
-		
 		InitialFocusSetter.setInitialFocus(frame, subtitleArea);
+		
 		//frame.pack();
 		frame.addWindowListener(new WindowAdapter() { 
 			
