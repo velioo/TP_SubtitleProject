@@ -64,8 +64,6 @@ public class InsertSubsToTable {
 					
 					UndoListener.undoStack.push(temp);
 					
-					DeleteSubsFromTable.isForOn = false;
-					
 					for (int i = 0; i < subtitleTable.getRowCount(); i++) {
 						model.setValueAt(i + 1 + "\n", i, 0);
 					}
@@ -74,6 +72,8 @@ public class InsertSubsToTable {
 					subtitleTable.addRowSelectionInterval(currentSelectedRow, currentSelectedRow);
 					subtitleTable.setValueAt(" ", currentSelectedRow, 3);
 					subtitleArea.setText("");
+					
+					DeleteSubsFromTable.isForOn = false;
 				}
 			});
 		}
@@ -86,6 +86,9 @@ public class InsertSubsToTable {
 			@Override
 			public void run() {
 				splitedArgs[3] = splitedArgs[3] + "\n";
+				
+				DeleteSubsFromTable.isForOn = true;
+				
 				model.insertRow(Integer.parseInt(splitedArgs[0]), splitedArgs);
 				
 				for (int i = 0; i < subtitleTable.getRowCount(); i++) {
@@ -96,6 +99,8 @@ public class InsertSubsToTable {
 				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]), Integer.parseInt(splitedArgs[0]));
 				subtitleTable.removeRowSelectionInterval(0, subtitleTable.getRowCount() - 1);
 				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]), Integer.parseInt(splitedArgs[0]));
+				
+				DeleteSubsFromTable.isForOn = false;
 			}
 		});
 		

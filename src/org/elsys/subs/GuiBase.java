@@ -704,6 +704,7 @@ public class GuiBase {
 	    });
 		
 		subtitleTable.addKeyListener(new TableKeyListener(subtitleTable,subtitleArea, subtitleNumTextField, startTextField, durationTextField, endTextField));
+		subtitleArea.addKeyListener(new TableKeyListener(subtitleTable,subtitleArea, subtitleNumTextField, startTextField, durationTextField, endTextField));
 		//
 		
 		// Adding subtitle to JTable	

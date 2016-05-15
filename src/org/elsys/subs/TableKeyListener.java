@@ -58,7 +58,6 @@ public class TableKeyListener implements KeyListener{
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		//System.out.println(e.getKeyCode());
 		if(keyCtrl == e.getKeyCode()) {
 			valueCtrl = true;
 		}

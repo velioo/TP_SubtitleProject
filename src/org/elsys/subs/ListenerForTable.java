@@ -17,17 +17,33 @@ import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 
 public class ListenerForTable {
 	
+	//private String temp;
+	
 	@SuppressWarnings("unused")
 	public ListenerForTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JFormattedTextField endTextField, JTextField durationTextField, boolean videoOpened, EmbeddedMediaPlayerComponent mediaPlayerComponent, JCheckBox seekCheckBox, int lastSelectedRow) {
 		
 		try {
 			DefaultTableModel model = (DefaultTableModel) subtitleTable.getModel();
 			int selectedRowIndex = subtitleTable.getSelectedRow();
-			String lastText = subtitleArea.getText();
-			
 			Object[] obj = { "", "", "", "" };
 			
+			UndoListener.reset = true;
+			//String lastText = subtitleArea.getText();
+			
+/*			if(lastSelectedRow != -1) {
+				if(!lastText.equals(subtitleTable.getValueAt(lastSelectedRow, 3).toString())) {
+					temp = "chg|";
+					
+					temp = temp + lastSelectedRow + "|" + subtitleTable.getValueAt(lastSelectedRow, 1) + "|" + 
+					subtitleTable.getValueAt(lastSelectedRow, 2) + "|";
+					String temp3 = subtitleTable.getValueAt(lastSelectedRow, 3).toString();
+					temp3 = temp3.replaceAll("\n", "");
+					temp = temp + temp3 + "\n";
+				}
+			}*/
+			
 			if(selectedRowIndex != -1) {
+				
 				for (int i = 0; i < 4; i++) {
 					obj[i] = model.getValueAt(selectedRowIndex, i);
 				}
@@ -48,7 +64,6 @@ public class ListenerForTable {
 				}
 				
 				MouseListener listeners [] = subtitleTable.getMouseListeners();
-				
 				if(listeners.length == 4)
 					subtitleTable.removeMouseListener(listeners[3]);
 				
@@ -62,8 +77,19 @@ public class ListenerForTable {
 				    }
 				});
 			
-			//if(lastSelectedRow != -1 && !DeleteSubsFromTable.isForOn)
-				//model.setValueAt(lastText, lastSelectedRow, 3);
+/*			if(lastSelectedRow != -1 && !DeleteSubsFromTable.isForOn) {
+				if(!lastText.equals(subtitleTable.getValueAt(lastSelectedRow, 3).toString())) {
+					model.setValueAt(lastText, lastSelectedRow, 3);
+					
+					temp = temp + lastSelectedRow + "|" + subtitleTable.getValueAt(lastSelectedRow, 1) + "|" + 
+					subtitleTable.getValueAt(lastSelectedRow, 2) + "|";
+					String temp3 = subtitleTable.getValueAt(lastSelectedRow, 3).toString();
+					temp3 = temp3.replaceAll("\n", "");
+					temp = temp + temp3 + "\n";
+					
+					UndoListener.undoStack.push(temp);
+				}
+			}*/
 			
 		}
 			

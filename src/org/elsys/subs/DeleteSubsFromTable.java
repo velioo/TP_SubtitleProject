@@ -61,8 +61,6 @@ public class DeleteSubsFromTable {
 						model.removeRow(currentSelectedRows[i]-i);
 					}
 					
-					isForOn = false;
-					
 					for (int i = 0; i < subtitleTable.getRowCount(); i++) {
 						model.setValueAt(i + 1 + "\n", i, 0);
 					}
@@ -84,6 +82,8 @@ public class DeleteSubsFromTable {
 						subtitleNumTextField.setEditable(false);
 						durationTextField.setText("2");
 					}
+					
+					isForOn = false;
 					//subtitleArea.grabFocus();
 				}
 			});
@@ -101,6 +101,9 @@ public class DeleteSubsFromTable {
 			public void run() {
 				
 				splitedArgs[3] = splitedArgs[3] + "\n";
+				
+				isForOn = true;
+				
 				model.removeRow(Integer.parseInt(splitedArgs[0]) - i);
 				
 				for (int i = 0; i < subtitleTable.getRowCount(); i++) {
@@ -108,6 +111,8 @@ public class DeleteSubsFromTable {
 				}
 				
 				subtitleTable.addRowSelectionInterval(Integer.parseInt(splitedArgs[0]) - i, Integer.parseInt(splitedArgs[0]) - i);
+				
+				isForOn = false;
 			}
 		});
 		
