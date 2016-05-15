@@ -126,9 +126,11 @@ public class WriteSubsToTable {
 				
 				temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
 				subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
-				temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
+				temp3 = ListenerForTable.lastText;
 				temp3 = temp3.replaceAll("\n", "");
 				temp = temp + temp3 + "\n";
+				
+				System.out.println(temp3);
 				
 			}
 			

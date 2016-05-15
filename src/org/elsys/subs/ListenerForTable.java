@@ -19,6 +19,8 @@ public class ListenerForTable {
 	
 	//private String temp;
 	
+	public static String lastText;
+	
 	@SuppressWarnings("unused")
 	public ListenerForTable(JTextArea subtitleArea, JTable subtitleTable, JTextField subtitleNumTextField, JFormattedTextField startTextField, JFormattedTextField endTextField, JTextField durationTextField, boolean videoOpened, EmbeddedMediaPlayerComponent mediaPlayerComponent, JCheckBox seekCheckBox, int lastSelectedRow) {
 		
@@ -28,7 +30,6 @@ public class ListenerForTable {
 			Object[] obj = { "", "", "", "" };
 			
 			UndoListener.reset = true;
-			//String lastText = subtitleArea.getText();
 			
 /*			if(lastSelectedRow != -1) {
 				if(!lastText.equals(subtitleTable.getValueAt(lastSelectedRow, 3).toString())) {
@@ -91,6 +92,8 @@ public class ListenerForTable {
 				}
 			}*/
 			
+				lastText = subtitleArea.getText();
+				System.out.println(lastText);
 		}
 			
 		} catch(Exception e) {
