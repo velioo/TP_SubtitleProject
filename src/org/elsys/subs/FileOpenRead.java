@@ -60,7 +60,6 @@ public class FileOpenRead {
 			
 			while ((line = reader.readLine()) != null) {
 				if (encoding == "UTF-8" && step == 0){
-					System.out.println(line);
 					line = line.substring(1);
 					System.out.println(line);
 				}

@@ -23,17 +23,6 @@ public class WriteSubsToTable {
 		Integer rowCount = subtitleTable.getRowCount();
 		int currentSelectedRow = subtitleTable.getSelectedRow();
 		
-		if(currentSelectedRow != -1) {
-			temp = "chg|";
-			
-			temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
-			subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
-			String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
-			temp3 = temp3.replaceAll("\n", "");
-			temp = temp + temp3 + "\n";
-			
-		}
-		
 		if(subtitleTable.getSelectedRow() == -1) {
 			
 			if(synchCheckBox.isSelected() && mediaPlayerComponent.isValid()) {
@@ -113,11 +102,36 @@ public class WriteSubsToTable {
 			else 
 				obj[3] = subtitleArea.getText();
 			
+			if(obj[3].equals("") || obj[3] == null || obj[3].equals("\n")) 
+				obj[3] = "\u200B";
+			
 			model.addRow(obj);
+			
+			String temp = "ins|";
+			
+			temp = temp + rowCount + "|" + subtitleTable.getValueAt(rowCount, 1) + "|" + 
+			subtitleTable.getValueAt(rowCount, 2) + "|";
+			String temp3 = subtitleTable.getValueAt(rowCount, 3).toString();
+			temp3 = temp3.replaceAll("\n", "");
+			temp = temp + temp3 + "\n";
+			
+			UndoListener.undoStack.push(temp);
 			
 			rewriteTextFields(rowCount, subtitleTable, startTextField, endTextField, durationTextField, subtitleNumTextField, currentSelectedRow);
 			
 		} else {
+			String temp3 = "";
+			if(currentSelectedRow != -1) {
+				temp = "chg|";
+				
+				temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
+				subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
+				temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
+				temp3 = temp3.replaceAll("\n", "");
+				temp = temp + temp3 + "\n";
+				
+			}
+			
 			clear = 1;
 			int columnNum;
 			columnNum = subtitleTable.getSelectedRow();
@@ -141,17 +155,20 @@ public class WriteSubsToTable {
 				rewriteTextFields(rowCount, subtitleTable, startTextField, endTextField, durationTextField, subtitleNumTextField, currentSelectedRow);
 				clear = 0;
 			}
-		}
-		
-		if(currentSelectedRow != -1) {
 			
-			temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
-			subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
-			String temp3 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
-			temp3 = temp3.replaceAll("\n", "");
-			temp = temp + temp3 + "\n";
-			
-			UndoListener.undoStack.push(temp);
+			if(currentSelectedRow != -1) {
+				
+				temp = temp + currentSelectedRow + "|" + subtitleTable.getValueAt(currentSelectedRow, 1) + "|" + 
+				subtitleTable.getValueAt(currentSelectedRow, 2) + "|";
+				String temp4 = subtitleTable.getValueAt(currentSelectedRow, 3).toString();
+				temp4 = temp4.replaceAll("\n", "");
+				temp = temp + temp4 + "\n";
+				
+				if(!temp3.equals(temp4)) {
+					System.out.println("It's not equal");
+					UndoListener.undoStack.push(temp);
+				}
+			}
 		}
 		
 		if(mediaPlayerComponent.isValid()) {

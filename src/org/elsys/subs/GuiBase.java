@@ -101,7 +101,7 @@ public class GuiBase {
 		othersPanel.add(textPane, BorderLayout.SOUTH);
 		textPane.setLayout(new BorderLayout());
 		
-		subtitleArea = new JTextArea();
+		subtitleArea = new JTextArea("\u200B");
 		subtitleArea.setPreferredSize(new Dimension(200, 200));
 		subtitleArea.setFont(new Font("Arial", Font.PLAIN, 16));
 		subtitleArea.setTabSize(4);
@@ -705,6 +705,7 @@ public class GuiBase {
 		
 		subtitleTable.addKeyListener(new TableKeyListener(subtitleTable,subtitleArea, subtitleNumTextField, startTextField, durationTextField, endTextField));
 		subtitleArea.addKeyListener(new TableKeyListener(subtitleTable,subtitleArea, subtitleNumTextField, startTextField, durationTextField, endTextField));
+		subtitleArea.getDocument().addDocumentListener(new ListenerForDocument(subtitleTable,subtitleArea));
 		//
 		
 		// Adding subtitle to JTable	

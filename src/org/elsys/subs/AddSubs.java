@@ -48,7 +48,7 @@ public class AddSubs {
 						});
 						int i = writeSubsToTable.clearValue();
 						if(i == 0)
-							subtitleArea.setText(null);
+							subtitleArea.setText("");
 					}
 					e.consume();
 				}	
