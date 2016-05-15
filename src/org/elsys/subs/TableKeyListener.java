@@ -176,7 +176,7 @@ public class TableKeyListener implements KeyListener{
 
 	}
 	
-	private void cut() {
+	public void cut() {
 		copy();
 		DeleteSubsFromTable deleteSubsFromTable = new DeleteSubsFromTable(subtitleArea, subtitleTable, subtitleNumTextField, startTextField, durationTextField, endTextField);
 		deleteSubsFromTable.delete();

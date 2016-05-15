@@ -93,7 +93,7 @@ public class ListenerForTable {
 			}*/
 			
 				lastText = subtitleArea.getText();
-				System.out.println(lastText);
+				//System.out.println(lastText);
 		}
 			
 		} catch(Exception e) {

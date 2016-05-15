@@ -42,7 +42,7 @@ public class UndoListener {
 			String[] splitedCommands = lastCommand.split("\n");
 			String[] splitedArgs = splitedCommands[0].split("\\|");
 			
-			System.out.println("Undo: " + lastCommand);
+			//System.out.println("Undo: " + lastCommand);
 			
 			try {
 				if(reset == true) {
@@ -143,7 +143,7 @@ public class UndoListener {
 			if( (reset == false) || (reset == true && !splitedArgs[0].equals("area"))) {
 				undoStack.push(lastCommand);
 				
-				System.out.println("Redo: " + lastCommand);
+				//System.out.println("Redo: " + lastCommand);
 				
 				if (splitedArgs[0].equals("del")) {
 					

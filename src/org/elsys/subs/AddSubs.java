@@ -58,7 +58,7 @@ public class AddSubs {
 					shift = true;
 				}
 				if(e.getKeyCode() == KeyEvent.VK_SPACE) {
-					System.out.println("RESET FALSE");
+					//System.out.println("RESET FALSE");
 					UndoListener.reset = false;
 					String temp = "area|";
 					String[] splitedArea = subtitleArea.getText().split(" ");

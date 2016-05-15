@@ -454,6 +454,9 @@ public class GuiBase {
 		
 		JMenuItem deleteItem;
 		JMenuItem insertItem;
+		JMenuItem copyItem;
+		JMenuItem pasteItem;
+		JMenuItem cutItem;
 		    
 		insertItem = new JMenuItem("Insert subtitle");
 		insertItem.addActionListener(new ActionListener() {
@@ -487,6 +490,37 @@ public class GuiBase {
 		        	popup.show(e.getComponent(), e.getX(), e.getY());
 		    }
 		});
+		copyItem = new JMenuItem("Copy");
+		copyItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tableKeyListener.copy();
+				resizedNew();
+			}
+		});
+		popup.add(copyItem);
+		pasteItem = new JMenuItem("Paste");
+		pasteItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tableKeyListener.paste();
+				resizedNew();
+			}
+		});
+		popup.add(pasteItem);
+		cutItem = new JMenuItem("Cut");
+		cutItem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tableKeyListener.cut();
+				resizedNew();
+			}
+		});
+		popup.add(cutItem);
+		
 		
 			
 		// Make the Menubar
